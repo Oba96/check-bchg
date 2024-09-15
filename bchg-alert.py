@@ -55,8 +55,10 @@ def main():
         # Save the new hash to the file
         with open(last_hash_file, "w") as file:
             file.write(current_hash)
+        return 1  # Return exit code 1 to indicate change
     else:
         send_email("Website No Change Alert", f"No changes detected on the page at {URL}.")
+        return 0  # Return exit code 0 to indicate no change
 
 if __name__ == "__main__":
-    main()
+    exit(main())  # Exit with 1 if updated, 0 if not
