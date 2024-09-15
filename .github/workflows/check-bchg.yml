@@ -23,7 +23,7 @@ jobs:
           pip install -r requirements.txt  # Install any dependencies
 
       - name: Run Python script
-        run: python bchg-alert.py  # Update this path if needed
+        run: python bchg-alert.py  # Adjust path if needed
 
       - name: Commit changes
         if: ${{ github.ref == 'refs/heads/main' }}
@@ -34,4 +34,5 @@ jobs:
           git commit -m "Update last_hash.txt"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
