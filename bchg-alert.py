@@ -6,19 +6,20 @@ from email.mime.multipart import MIMEMultipart
 import os
 
 # Configuration
-URL = "https://www.bchg.co.uk/our-properties/renting-with-bchg/"
-EMAIL_FROM = "jjuniormvila@gmail.com"
-EMAIL_TO = "jjuniormvila@gmail.com"
-EMAIL_PASSWORD = "crqecwoxsuzlcofn"
+URL = "https://www.bchg.co.uk/our-properties/renting-with-bchg/"  # URL to monitor
+EMAIL_FROM = "jjuniormvila@gmail.com"  # Sender email
+EMAIL_TO = "jjuniormvila@gmail.com"    # Recipient email
+EMAIL_PASSWORD = "crqecwoxsuzlcofn"    # Email password
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
-LAST_HASH_FILE = "last_hash.txt"
 
+# Get the hash of the web page content
 def get_page_hash(url):
     response = requests.get(url)
     content = response.text
     return hashlib.md5(content.encode('utf-8')).hexdigest()
 
+# Send an email notification
 def send_email(subject, body):
     msg = MIMEMultipart()
     msg['From'] = EMAIL_FROM
@@ -33,12 +34,17 @@ def send_email(subject, body):
         server.send_message(msg)
 
 def main():
+    # Path to the last_hash.txt file
+    last_hash_file = "last_hash.txt"
+
+    # Ensure the file exists or create it if missing
+    if not os.path.exists(last_hash_file):
+        with open(last_hash_file, "w") as file:
+            file.write("")  # Write an empty string to create the file
+
     # Read the last known hash
-    if os.path.exists(LAST_HASH_FILE):
-        with open(LAST_HASH_FILE, "r") as file:
-            last_hash = file.read().strip()
-    else:
-        last_hash = ""
+    with open(last_hash_file, "r") as file:
+        last_hash = file.read().strip()
 
     # Get the current hash of the web page
     current_hash = get_page_hash(URL)
@@ -46,9 +52,9 @@ def main():
     # Compare hashes to check for updates
     if current_hash != last_hash:
         send_email("Website Update Alert", f"The page at {URL} has been updated.")
-        with open(LAST_HASH_FILE, "w") as file:
+        # Save the new hash to the file
+        with open(last_hash_file, "w") as file:
             file.write(current_hash)
-        # Optionally, commit changes if needed
     else:
         send_email("Website No Change Alert", f"No changes detected on the page at {URL}.")
 
