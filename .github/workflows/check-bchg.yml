@@ -11,17 +11,27 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.9'
+          python-version: '3.x'
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt  # If you have dependencies
-
+          pip install -r requirements.txt  # Install any dependencies
 
       - name: Run Python script
-        run: python bchg-alert.py
+        run: python bchg-alert.py  # Update this path if needed
+
+      - name: Commit changes
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'actions@github.com'
+          git add last_hash.txt
+          git commit -m "Update last_hash.txt"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
