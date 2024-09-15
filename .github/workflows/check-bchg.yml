@@ -3,6 +3,7 @@ name: Run Python Script
 on:
   schedule:
     - cron: '0 */6 * * *'  # Runs every 6 hours
+  workflow_dispatch:  # Allows manual triggering
 
 jobs:
   run-script:
@@ -15,11 +16,11 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9'
+          python-version: '3.x'
 
       - name: Install dependencies
         run: |
           pip install -r requirements.txt  # If you have dependencies
 
       - name: Run Python script
-        run: python /path/to/your-script.py
+        run: python bchg-alert.py
