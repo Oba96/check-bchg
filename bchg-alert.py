@@ -34,8 +34,9 @@ def send_email(subject, body):
         server.send_message(msg)
 
 def main():
-    # Path to the last_hash.txt file
-    last_hash_file = "last_hash.txt"
+    # Use an absolute path to the last_hash.txt file in the repo directory
+    repo_dir = os.path.dirname(os.path.abspath(__file__))
+    last_hash_file = os.path.join(repo_dir, "last_hash.txt")
 
     # Ensure the file exists or create it if missing
     if not os.path.exists(last_hash_file):
