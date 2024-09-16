@@ -61,4 +61,7 @@ def main():
         return 0  # Return exit code 0 to indicate no change
 
 if __name__ == "__main__":
+    print("Fetching page...")
+    print(f"Current hash: {current_hash}")
+    print(f"Last hash: {last_hash}")
     exit(main())  # Exit with 1 if updated, 0 if not
