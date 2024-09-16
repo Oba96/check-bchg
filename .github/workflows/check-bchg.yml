@@ -29,8 +29,7 @@ jobs:
         run: |
           python bchg-alert.py || exit 0  # Ignore exit code 1, treat as success
 
-      - name: Commit and Push changes if last_hash.txt updated
-        if: steps.run_script.outcome == 'failure'  # This means the hash has changed (exit code 1)
+      - name: Commit and Push changes if last_hash.txt updated  # This means the hash has changed (exit code 1)
         run: |
          git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
