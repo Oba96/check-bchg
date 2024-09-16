@@ -23,7 +23,9 @@ jobs:
           pip install -r requirements.txt  # Install any dependencies
 
       - name: Run Python script
-        run: python bchg-alert.py  # Adjust path if needed
+        id: run_script
+        run: |
+          python bchg-alert.py || exit 0  # Ignore exit code 1, treat as success
 
       - name: Commit updated last_hash.txt if changed
         if: steps.run_script.outcome == 'failure'  # This means the hash has changed (exit code 1)
@@ -35,4 +37,3 @@ jobs:
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-
