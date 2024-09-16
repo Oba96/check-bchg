@@ -41,26 +41,35 @@ def main():
     if not os.path.exists(last_hash_file):
         with open(last_hash_file, "w") as file:
             file.write("")  # Write an empty string to create the file
+        print(f"Created new {last_hash_file}")
 
     # Read the last known hash
-    with open(last_hash_file, "r") as file:
-        last_hash = file.read().strip()
+    try:
+        with open(last_hash_file, "r") as file:
+            last_hash = file.read().strip()
+    except Exception as e:
+        print(f"Error reading {last_hash_file}: {e}")
+        last_hash = ""
 
     # Get the current hash of the web page
     current_hash = get_page_hash(URL)
     print(f"Current hash: {current_hash}")
     print(f"Last hash: {last_hash}")
+
     # Compare hashes to check for updates
     if current_hash != last_hash:
         send_email("Website Update Alert", f"The page at {URL} has been updated.")
         # Save the new hash to the file
-        with open(last_hash_file, "w") as file:
-            file.write(current_hash)
+        try:
+            with open(last_hash_file, "w") as file:
+                file.write(current_hash)
+            print(f"Updated {last_hash_file} with new hash.")
+        except Exception as e:
+            print(f"Error writing {last_hash_file}: {e}")
         return 1  # Return exit code 1 to indicate change
     else:
         send_email("Website No Change Alert", f"No changes detected on the page at {URL}.")
         return 0  # Return exit code 0 to indicate no change
 
 if __name__ == "__main__":
-    print("Fetching page...")
     exit(main())  # Exit with 1 if updated, 0 if not
