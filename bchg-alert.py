@@ -48,7 +48,8 @@ def main():
 
     # Get the current hash of the web page
     current_hash = get_page_hash(URL)
-
+    print(f"Current hash: {current_hash}")
+    print(f"Last hash: {last_hash}")
     # Compare hashes to check for updates
     if current_hash != last_hash:
         send_email("Website Update Alert", f"The page at {URL} has been updated.")
@@ -62,6 +63,4 @@ def main():
 
 if __name__ == "__main__":
     print("Fetching page...")
-    print(f"Current hash: {current_hash}")
-    print(f"Last hash: {last_hash}")
     exit(main())  # Exit with 1 if updated, 0 if not
